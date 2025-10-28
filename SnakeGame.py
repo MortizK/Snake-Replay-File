@@ -1,9 +1,9 @@
 import json
-from random import randint
+from random import choice
 
 # --- Settings ---
-WIDTH = 10
-HEIGHT = 10
+WIDTH = 8
+HEIGHT = 8
 
 UP = "w"
 LEFT = "a"
@@ -34,14 +34,18 @@ def printBoard(snake, apple):
     print(string)
 
 def newApple(snake):
-    newApple = randint(0, WIDTH * HEIGHT - 1)
-    while newApple in snake:
-        newApple = randint(0, WIDTH * HEIGHT - 1)
-    return newApple
+    all_cells = set(range(WIDTH * HEIGHT))
+    free_cells = list(all_cells - set(snake))
+    if not free_cells:
+        print("WARNING: No free space for new apple!")
+        return None  # No free space left, game should end
+    return choice(free_cells)
+
 
 # --- Game Initialization ---
-snake = [40, 41, 42]
-apple = 49
+start_index = (HEIGHT // 2) * WIDTH
+snake = [start_index, start_index + 1, start_index + 2]
+apple = start_index + WIDTH - 1
 
 printBoard(snake, apple)
 
@@ -83,6 +87,7 @@ while True:
     ate_apple = newHead == apple
     if ate_apple:
         apple = newApple(snake)
+        print(f"New apple at {idToCord(apple)}")
     else:
         snake.pop(0)
 
