@@ -7,7 +7,7 @@ from pathlib import Path
 # -----------------------------
 # Optional binary decoder (from earlier)
 # -----------------------------
-DIRECTION_MAP = {"U":0, "R":1, "D":2, "L":3}
+DIRECTION_MAP = {"w":0, "d":1, "s":2, "a":3}
 REVERSE_DIR = {v:k for k,v in DIRECTION_MAP.items()}
 
 class SnakeBinaryReplay:
@@ -69,7 +69,7 @@ class SnakeReplayViewer:
     BG_COLOR = (30, 30, 30)
     SNAKE_COLOR = (0, 255, 0)
     APPLE_COLOR = (255, 60, 60)
-    SPEED = 6  # frames per second
+    SPEED = 2  # frames per second
 
     def __init__(self, replay):
         self.replay = replay
@@ -93,15 +93,18 @@ class SnakeReplayViewer:
                            self.CELL_SIZE, self.CELL_SIZE)
         pygame.draw.rect(self.screen, color, rect)
 
-    def move_snake(self, direction):
-        head_x, head_y = self.snake[0]
-        if direction == "U": head_y -= 1
-        elif direction == "D": head_y += 1
-        elif direction == "L": head_x -= 1
-        elif direction == "R": head_x += 1
+    def move_snake(self, direction, apple):
+        head_x, head_y = self.snake[-1]
+        if direction == "w": head_y -= 1
+        elif direction == "s": head_y += 1
+        elif direction == "a": head_x -= 1
+        elif direction == "d": head_x += 1
         new_head = (head_x, head_y)
-        self.snake.insert(0, new_head)
-        self.snake.pop()  # remove tail unless apple eaten (we handle that externally)
+        self.snake.append(new_head)
+
+        # Check for apple
+        if self.snake[-1] != apple:
+            self.snake.pop(0)
 
     def play(self):
         for segment in self.replay["segments"]:
@@ -117,12 +120,7 @@ class SnakeReplayViewer:
                         return
 
                 # Move snake
-                self.move_snake(move)
-
-                # Check for apple
-                if self.snake[0] == apple and len(self.snake) < length_target:
-                    # Grow snake (append tail again)
-                    self.snake.append(self.snake[-1])
+                self.move_snake(move, apple)
 
                 # Draw frame
                 self.screen.fill(self.BG_COLOR)
@@ -152,7 +150,8 @@ def load_replay(path):
         raise ValueError("Unsupported replay format (use .json or .bin)")
 
 if __name__ == "__main__":
-    path = input("Enter replay file (.json or .bin): ").strip()
+    # path = input("Enter replay file (.json or .bin): ").strip()
+    path = "snake_replay.json".strip()
     replay = load_replay(path)
     viewer = SnakeReplayViewer(replay)
     viewer.play()

@@ -2,7 +2,7 @@ import struct
 
 from SnakeReplay import SnakeReplay
 
-DIRECTION_MAP = {"U":0, "R":1, "D":2, "L":3}
+DIRECTION_MAP = {"w":0, "d":1, "s":2, "a":3}
 REVERSE_DIR = {v:k for k,v in DIRECTION_MAP.items()}
 
 class SnakeBinaryReplay:
