@@ -69,7 +69,7 @@ class SnakeReplayViewer:
     BG_COLOR = (30, 30, 30)
     SNAKE_COLOR = (0, 255, 0)
     APPLE_COLOR = (255, 60, 60)
-    SPEED = 2  # frames per second
+    SPEED = 10  # frames per second
 
     def __init__(self, replay):
         self.replay = replay
