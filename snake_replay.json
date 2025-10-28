@@ -2,78 +2,89 @@
   "version": "3.0",
   "metadata": {
     "map": {
-      "width": 20,
-      "height": 20
+      "width": 10,
+      "height": 10
     },
     "initial": {
       "snake": [
         [
-          10,
-          10
+          0,
+          4
         ],
         [
-          9,
-          10
+          1,
+          4
         ],
         [
-          8,
-          10
+          2,
+          4
         ]
       ],
-      "direction": "R"
+      "direction": "d"
     }
   },
   "segments": [
     {
       "apple": [
-        15,
-        5
+        9,
+        4
       ],
       "moves": [
-        "R",
-        "R",
-        "R",
-        "U",
-        "U",
-        "L"
+        "d",
+        "d",
+        "d",
+        "d",
+        "d",
+        "d",
+        "d"
       ],
       "length": 4
     },
     {
       "apple": [
-        3,
-        3
+        8,
+        9
       ],
       "moves": [
-        "U",
-        "U",
-        "L",
-        "L",
-        "D",
-        "D",
-        "R"
+        "s",
+        "a",
+        "w",
+        "a",
+        "s",
+        "s",
+        "s",
+        "s",
+        "s",
+        "d"
       ],
       "length": 5
     },
     {
       "apple": [
-        10,
-        10
+        8,
+        7
       ],
       "moves": [
-        "R",
-        "R",
-        "R",
-        "D",
-        "L",
-        "L",
-        "U"
+        "w",
+        "w"
       ],
       "length": 6
+    },
+    {
+      "apple": [
+        2,
+        8
+      ],
+      "moves": [
+        "a",
+        "s",
+        "d"
+      ],
+      "length": 5
     }
   ],
   "result": {
-    "score": 6,
-    "reason": "collision_with_self"
+    "score": 5,
+    "reason": "collision"
   }
 }
