@@ -33,9 +33,9 @@ def printBoard(snake, apple):
             string += ". "
     print(string)
 
-def newApple(snake):
+def newApple(snake, newHead):
     all_cells = set(range(WIDTH * HEIGHT))
-    free_cells = list(all_cells - set(snake))
+    free_cells = list(all_cells - set(snake) - {newHead})
     if not free_cells:
         print("WARNING: No free space for new apple!")
         return None  # No free space left, game should end
@@ -86,7 +86,7 @@ while True:
     # Update movement & apple
     ate_apple = newHead == apple
     if ate_apple:
-        apple = newApple(snake)
+        apple = newApple(snake, newHead)
         print(f"New apple at {idToCord(apple)}")
     else:
         snake.pop(0)
