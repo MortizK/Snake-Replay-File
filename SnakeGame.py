@@ -90,6 +90,9 @@ while True:
     else:
         snake.pop(0)
 
+    # Move head
+    snake.append(newHead)
+
     # Game Ending Conditions
     if len(snake) == HEIGHT * WIDTH:
         print("YOU WIN")
@@ -103,9 +106,6 @@ while True:
         print("GAME OVER")
         result = {"score": len(snake), "reason": "collision"}
         break
-
-    # Move head
-    snake.append(newHead)
 
     # Draw
     printBoard(snake, apple)
