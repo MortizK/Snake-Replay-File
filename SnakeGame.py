@@ -87,7 +87,6 @@ while True:
     ate_apple = newHead == apple
     if ate_apple:
         apple = newApple(snake, newHead)
-        print(f"New apple at {idToCord(apple)}")
     else:
         snake.pop(0)
 
@@ -95,6 +94,10 @@ while True:
     if len(snake) == HEIGHT * WIDTH:
         print("YOU WIN")
         result = {"score": len(snake), "reason": "win"}
+        break
+    elif apple is None:
+        print("ERROR: No space for new apple.")
+        result = {"score": len(snake), "reason": "error"}
         break
     elif newHead in snake:
         print("GAME OVER")
