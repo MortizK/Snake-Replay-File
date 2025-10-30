@@ -1,0 +1,32 @@
+{
+  "version": "4.0",
+  "metadata": {
+    "map": {
+      "width": 10,
+      "height": 10
+    },
+    "initial": {
+      "snake": [40, 41, 42]
+    },
+    "seed": 12345
+  },
+  "result": {
+    "score": 2,
+    "reason": 2
+  },
+  "segments": [
+    {
+      "apple": 49,
+      "moves": "SSSSS"
+      
+    },
+    {
+      "apple": 28,
+      "moves": "LLR"
+    },
+    {
+      "apple": 0,
+      "moves": "RSS"
+    }
+  ]
+}
