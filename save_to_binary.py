@@ -18,10 +18,12 @@ A 30x30 map with a snake replay can be broken down as follows:
     Total bits = 405000 + 1800 + 2700 = 409500 bits
     Total bytes = 409500 / 8 = 51187.5 bytes
 
-By Bit Packing: 2700 / 51188 = ~5.27% overhead
+By Bit Packing: 2700 / 409500 = ~0.66% overhead
+
+The Chosen Example is a worst-case, as most runs don't start with a segment of 450 moves.
 
 Questions to consider:
-- Is the complexity of bit-packing worth the ~5% size reduction?
+- Is the complexity of bit-packing worth the ~1% size reduction?
 - Can we still extend a run with single segments without re-encoding the entire file?
 """
 
