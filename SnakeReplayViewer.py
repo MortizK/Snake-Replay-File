@@ -10,6 +10,8 @@ from pathlib import Path
 DIRECTION_MAP = {"w":0, "d":1, "s":2, "a":3}
 REVERSE_DIR = {v:k for k,v in DIRECTION_MAP.items()}
 
+file = "snake_replay.bin"
+
 class SnakeBinaryReplay:
     HEADER_MAGIC = b"SNAK"
 
@@ -238,7 +240,7 @@ def load_replay(path):
 
 if __name__ == "__main__":
     # path = input("Enter replay file (.json or .bin): ").strip()
-    path = "snake_replay.json".strip()
+    path = file
     replay = load_replay(path)
     viewer = SnakeReplayViewer(replay)
     viewer.play()

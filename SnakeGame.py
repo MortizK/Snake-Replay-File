@@ -1,9 +1,16 @@
 import json
 from random import choice
 
+from SnakeBinaryReplay import SnakeBinaryReplay
+from SnakeReplayViewer import SnakeReplayViewer
+
 # --- Settings ---
-WIDTH = 8
-HEIGHT = 8
+filename = "snake_replay_cycle"
+
+DOES_CYCLE = True
+
+WIDTH = 10
+HEIGHT = 10
 
 UP = "w"
 LEFT = "a"
@@ -12,7 +19,7 @@ RIGHT = "d"
 DIRECTIONS = [UP, LEFT, DOWN, RIGHT]
 
 # Hamiltonian Cycle 
-start = "d"*(WIDTH - 3) + "w"*(HEIGHT - 4) + "a"*(WIDTH - 1) + "s"
+start = "d"*(WIDTH - 3) + "w"*(HEIGHT // 2) + "a"*(WIDTH - 1) + "s"
 downup = "s"*(HEIGHT - 2) + "d" + "w"*(HEIGHT - 2) + "d"
 back = "w" + "a"*(WIDTH - 1) + "s"
 hamiltonian_cycle = downup * ((WIDTH - 2) // 2) + downup[:-1] + back
@@ -72,13 +79,15 @@ segment_start_apple = idToCord(apple)
 # --- Game loop ---
 while True:
     # Input Handling
-    # dir = input().lower().strip()
-    # while dir not in DIRECTIONS:
-    #     dir = input().lower().strip()
-    if len(moves) == 0:
-        moves = hamiltonian_cycle
-    dir = moves[0]
-    moves = moves[1:]
+    if DOES_CYCLE:
+        if len(moves) == 0:
+            moves = hamiltonian_cycle
+        dir = moves[0]
+        moves = moves[1:]
+    else:
+        dir = input().lower().strip()
+        while dir not in DIRECTIONS:
+            dir = input().lower().strip()
 
     # Movement Direction
     newHead = None
@@ -104,7 +113,7 @@ while True:
     # Game Ending Conditions
     if len(snake) == HEIGHT * WIDTH - 1 and ate_apple:
         print("YOU WIN")
-        result = {"score": len(snake), "reason": "win"}
+        result = {"score": len(snake) + 1, "reason": "win"}
         break
     elif apple is None:
         print("ERROR: No space for new apple.")
@@ -143,7 +152,10 @@ if segment_moves:
 replay["result"] = result
 
 # --- Save Replay ---
-with open("snake_replay.json", "w", encoding="utf-8") as f:
-    json.dump(replay, f, indent=2)
+SnakeBinaryReplay().save(filename + ".bin", replay)
+# SnakeBinaryReplay().writeToJson(filename + ".json", filename + ".bin")
 
-print("\nReplay saved to snake_replay.json")
+viewer = SnakeReplayViewer(replay)
+viewer.play()
+
+print("\nReplay saved to " + filename + ".bin")

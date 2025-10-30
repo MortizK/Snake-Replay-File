@@ -97,16 +97,9 @@ class SnakeBinaryReplay:
                          "initial": {"snake": snake, "direction": direction}},
             "segments": segments
         }
-
-
-# --- Example usage ---
-if __name__ == "__main__":
-    # Load replay
-    replay_data = SnakeReplay.load_json("snake_replay.json")
     
-    # Save binary
-    SnakeBinaryReplay().save("snake_replay.bin", replay_data)
-
-    # Load binary
-    loaded = SnakeBinaryReplay().load("snake_replay.bin")
-    print(loaded["segments"][0])
+    def writeToJson(self, path_json, path_bin):
+        replay_data = self.load(path_bin)
+        with open(path_json, "w", encoding="utf-8") as f:
+            import json
+            json.dump(replay_data, f, indent=2)
