@@ -65,11 +65,15 @@ class SnakeBinaryReplay:
 # Snake Replay Viewer
 # -----------------------------
 class SnakeReplayViewer:
-    CELL_SIZE = 25
-    BG_COLOR = (30, 30, 30)
+    CELL_SIZE = 50
+    BG_LIGHT = (45, 45, 45)
+    BG_DARK = (30, 30, 30)
     SNAKE_COLOR = (0, 255, 0)
+    HEAD_COLOR = (50, 255, 50)
     APPLE_COLOR = (255, 60, 60)
-    SPEED = 10  # frames per second
+    GRID_COLOR = (50, 50, 50)
+    SPEED = 20  # frames per second
+
 
     def __init__(self, replay):
         self.replay = replay
@@ -92,6 +96,78 @@ class SnakeReplayViewer:
         rect = pygame.Rect(x * self.CELL_SIZE, y * self.CELL_SIZE,
                            self.CELL_SIZE, self.CELL_SIZE)
         pygame.draw.rect(self.screen, color, rect)
+    def draw_checkerboard(self):
+        for y in range(self.map_h):
+            for x in range(self.map_w):
+                color = self.BG_LIGHT if (x + y) % 2 == 0 else self.BG_DARK
+                rect = pygame.Rect(
+                    x * self.CELL_SIZE,
+                    y * self.CELL_SIZE,
+                    self.CELL_SIZE,
+                    self.CELL_SIZE
+                )
+                pygame.draw.rect(self.screen, color, rect)
+
+    def draw_snake(self):
+        if len(self.snake) < 2:
+            return
+
+        # Convert snake segment grid coordinates → pixel coordinates
+        points = [
+            (x * self.CELL_SIZE + self.CELL_SIZE // 2,
+             y * self.CELL_SIZE + self.CELL_SIZE // 2)
+            for x, y in self.snake
+        ]
+
+        # Draw body line
+        pygame.draw.lines(self.screen, self.SNAKE_COLOR, False, points, self.CELL_SIZE // 3)
+
+        # --- Draw head circle ---
+        hx, hy = points[-1]
+        pygame.draw.circle(self.screen, self.HEAD_COLOR, (hx, hy), self.CELL_SIZE // 3)
+
+        # --- Draw eyes ---
+        # Determine facing direction based on last two points
+        if len(points) >= 2:
+            x1, y1 = points[-2]
+            x2, y2 = points[-1]
+            dx = x2 - x1
+            dy = y2 - y1
+
+            # Normalize direction to one of four main axes
+            if abs(dx) > abs(dy):
+                dir_x = 1 if dx > 0 else -1
+                dir_y = 0
+            else:
+                dir_x = 0
+                dir_y = 1 if dy > 0 else -1
+
+            # Eye placement offsets (slightly forward and sideways)
+            head_radius = self.CELL_SIZE // 3
+            eye_offset_forward = head_radius * 0.6
+            eye_offset_side = head_radius * 0.4
+
+            # Compute perpendicular vector
+            perp_x, perp_y = -dir_y, dir_x
+
+            # Base (center of head)
+            base_x, base_y = hx, hy
+
+            # Eye centers
+            left_eye = (
+                base_x + dir_x * eye_offset_forward + perp_x * eye_offset_side,
+                base_y + dir_y * eye_offset_forward + perp_y * eye_offset_side
+            )
+            right_eye = (
+                base_x + dir_x * eye_offset_forward - perp_x * eye_offset_side,
+                base_y + dir_y * eye_offset_forward - perp_y * eye_offset_side
+            )
+
+            # Draw eyes
+            eye_radius = max(2, self.CELL_SIZE // 8)
+            pygame.draw.circle(self.screen, (255, 255, 255), left_eye, eye_radius)
+            pygame.draw.circle(self.screen, (255, 255, 255), right_eye, eye_radius)
+
 
     def move_snake(self, direction, apple):
         head_x, head_y = self.snake[-1]
@@ -123,10 +199,21 @@ class SnakeReplayViewer:
                 self.move_snake(move, apple)
 
                 # Draw frame
-                self.screen.fill(self.BG_COLOR)
-                self.draw_cell(apple, self.APPLE_COLOR)
-                for segment_pos in self.snake:
-                    self.draw_cell(segment_pos, self.SNAKE_COLOR)
+                # Draw checkerboard background
+                self.draw_checkerboard()
+
+                # Draw apple as a circle
+                ax, ay = apple
+                pygame.draw.circle(
+                    self.screen,
+                    self.APPLE_COLOR,
+                    (ax * self.CELL_SIZE + self.CELL_SIZE // 2,
+                    ay * self.CELL_SIZE + self.CELL_SIZE // 2),
+                    self.CELL_SIZE // 3
+                )
+
+                # Draw snake line + eyes
+                self.draw_snake()
 
                 pygame.display.flip()
                 self.clock.tick(self.SPEED)

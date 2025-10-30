@@ -11,6 +11,13 @@ DOWN = "s"
 RIGHT = "d"
 DIRECTIONS = [UP, LEFT, DOWN, RIGHT]
 
+# Hamiltonian Cycle 
+start = "d"*(WIDTH - 3) + "w"*(HEIGHT - 4) + "a"*(WIDTH - 1) + "s"
+downup = "s"*(HEIGHT - 2) + "d" + "w"*(HEIGHT - 2) + "d"
+back = "w" + "a"*(WIDTH - 1) + "s"
+hamiltonian_cycle = downup * ((WIDTH - 2) // 2) + downup[:-1] + back
+moves = start + hamiltonian_cycle
+
 # --- Helper functions ---
 def cordToID(x, y) -> int:
     return y * WIDTH + x
@@ -65,9 +72,13 @@ segment_start_apple = idToCord(apple)
 # --- Game loop ---
 while True:
     # Input Handling
-    dir = input().lower().strip()
-    while dir not in DIRECTIONS:
-        dir = input().lower().strip()
+    # dir = input().lower().strip()
+    # while dir not in DIRECTIONS:
+    #     dir = input().lower().strip()
+    if len(moves) == 0:
+        moves = hamiltonian_cycle
+    dir = moves[0]
+    moves = moves[1:]
 
     # Movement Direction
     newHead = None
@@ -90,11 +101,8 @@ while True:
     else:
         snake.pop(0)
 
-    # Move head
-    snake.append(newHead)
-
     # Game Ending Conditions
-    if len(snake) == HEIGHT * WIDTH:
+    if len(snake) == HEIGHT * WIDTH - 1 and ate_apple:
         print("YOU WIN")
         result = {"score": len(snake), "reason": "win"}
         break
@@ -106,6 +114,9 @@ while True:
         print("GAME OVER")
         result = {"score": len(snake), "reason": "collision"}
         break
+
+    # Move head
+    snake.append(newHead)
 
     # Draw
     printBoard(snake, apple)
