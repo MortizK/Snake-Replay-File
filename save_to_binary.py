@@ -1,5 +1,30 @@
 import struct
 
+"""
+Math what byte packing will do for the size of a 30x30 replay
+
+A 30x30 map with a snake replay can be broken down as follows:
+- Header: 20 bytes
+- Segment Count: 2 bytes
+- All Segments (Hamiltonian cycle): 
+    Statistically the first segment will take 450 moves
+    And the Last segment will take 1 move
+    In total: 450 * 900 apples / 2 = 202500 moves
+    Each move is 2 bits, so total bits = 202500 * 2 = 405000 bits
+    Each segment ends with an end-of-segment marker (11), which is 2 bits
+    2 bits * 900 segments = 1800 bits
+    The overhead per segment is the padding of a byte which is on average 3 bits
+    3 bits * 900 segments = 2700 bits
+    Total bits = 405000 + 1800 + 2700 = 409500 bits
+    Total bytes = 409500 / 8 = 51187.5 bytes
+
+By Bit Packing: 2700 / 51188 = ~5.27% overhead
+
+Questions to consider:
+- Is the complexity of bit-packing worth the ~5% size reduction?
+- Can we still extend a run with single segments without re-encoding the entire file?
+"""
+
 def encode_moves_bitpacked(moves: str) -> bytes:
     """
     Encode a string of moves into bit-packed bytes.
@@ -56,8 +81,8 @@ def replay_to_binary_struct(data: dict, output_path: str):
       "result": {"score": 2, "reason": 2},
       "metadata": {
         "map": {"width": 10, "height": 10},
-        "initial": {"snake": [40, 41, 42]}, 
-        "seed": 12345
+        "seed": 12345,
+        "initial": {"snake": [40, 41, 42]}
       },
       "segments": [
         "SSSSS",
@@ -72,9 +97,10 @@ def replay_to_binary_struct(data: dict, output_path: str):
     | Result:
         - score (H)                                       -> 2 bytes
         - reason code (B)                                 -> 1 bytes
-    | Map width (B), height (B)                           -> 2 bytes
-    | Map seed (I)                                        -> 4 bytes
-    | Initial snake length (B) + positions (H * n)        -> variable (n=3 => 7 bytes)
+    | Metadata:
+        - Map width (B), height (B)                       -> 2 bytes
+        - Map seed (I)                                    -> 4 bytes
+        - Initial snake length (B) + positions (H * n)    -> variable (n=3 => 7 bytes)
     | Segment count (H)                                   -> 2 bytes
         For each segment:
             - packed move bytes                           -> 4 moves per byte
@@ -163,8 +189,8 @@ def binary_to_replay_struct(input_path: str) -> dict:
         "version": "4.0",
         "metadata": {
             "map": {"width": width, "height": height},
-            "initial": {"snake": snake},
             "seed": seed,
+            "initial": {"snake": snake}
         },
         "result": {"score": score, "reason": reason},
         "segments": segments
