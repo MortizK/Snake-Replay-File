@@ -2,8 +2,8 @@ from random import seed, choice, randint
 from ReplayHandler import ReplayHandler
 
 # --- Game Config ---
-WIDTH = 8
-HEIGHT = 8
+WIDTH = 4
+HEIGHT = 4
 UP = "w"
 LEFT = "a"
 DOWN = "s"
