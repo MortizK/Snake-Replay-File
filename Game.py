@@ -1,4 +1,3 @@
-import json
 from random import seed, choice, randint
 from ReplayHandler import ReplayHandler
 
@@ -84,13 +83,17 @@ while True:
     elif dir == RIGHT:
         newHead = snake[-1] + 1
 
-    # Update snake
-    WIDTHlected_apple = newHead == apple
-    if WIDTHlected_apple:
+    # Update snake And Track Replay
+    collected_apple = newHead == apple
+    current_segment.append(dirToChar(last_dir, dir))
+    if collected_apple:
         apple = newApple(snake, newHead)
         score += 1
+        segments.append(''.join(current_segment))
+        current_segment = []
     else:
         tail = snake.pop(0)
+    last_dir = dir
 
     # Game over checks
     if len(snake) == HEIGHT * WIDTH - 1:
@@ -108,13 +111,6 @@ while True:
 
     snake.append(newHead)
     printBoard(snake, apple)
-
-    # Track replay
-    current_segment.append(dirToChar(last_dir, dir))
-    if WIDTHlected_apple:
-        segments.append(''.join(current_segment))
-        current_segment = []
-    last_dir = dir
 
 # Add any remaining moves
 if current_segment:
@@ -138,9 +134,4 @@ replay = {
 }
 
 # --- Save to File ---
-with open("replay.json", "w") as f:
-    json.dump(replay, f, indent=2)
-
-print("\nReplay saved to replay.json ✅")
-
-ReplayHandler().encode_to_binary(replay, "replay.bin")
+ReplayHandler().encode_to_binary(replay, "replays/replay_" + str(game_seed) + ".bin")
