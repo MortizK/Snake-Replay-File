@@ -53,7 +53,7 @@ class ReplayHandler:
 
         # Start with all bits from lastbyte until the 11 EOS
         mask = 0b11
-        for i in range(3):
+        for i in range(4):
             if lastbyte & mask == mask:
                 bits = lastbyte >> 2 * i
                 bit_len = 8 - 2 * i
@@ -192,10 +192,12 @@ if __name__ == "__main__":
     handler = ReplayHandler()
     
     # Load externally (for example purposes)
-    with open("replay.json", "r") as f:
-        replay_data = json.load(f)
+    path = input("Enter replay file (.bin): ").strip()
 
-    handler.encode_to_binary(replay_data, "replay.bin")
+    decoded = handler.decode_to_dict(path)
 
-    decoded = handler.decode_to_dict("replay.bin")
-    print(json.dumps(decoded, indent=2))
+    # Write Binary to json
+    with open(path + ".json", "w") as f:
+        json.dump(decoded, f, indent=2)
+
+    print("\nReplay saved to " + path + ".json ✅")
