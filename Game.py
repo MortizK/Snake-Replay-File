@@ -130,7 +130,9 @@ replay = {
     "metadata": {
         "map": {"width": WIDTH, "height": HEIGHT},
         "seed": game_seed,
-        "initial": {"snake": [40, 41, 42]}
+        "initial": {
+            "snake": [start, start + 1, start + 2]
+        }
     },
     "segments": segments
 }
