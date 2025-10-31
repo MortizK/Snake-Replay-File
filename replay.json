@@ -1,0 +1,83 @@
+{
+  "version": "5.0",
+  "result": {
+    "score": 61,
+    "reason": 1
+  },
+  "metadata": {
+    "map": {
+      "width": 8,
+      "height": 8
+    },
+    "seed": 2187882325,
+    "initial": {
+      "snake": [
+        40,
+        41,
+        42
+      ]
+    }
+  },
+  "segments": [
+    "SSSSS",
+    "RSRSSSSS",
+    "RRSSSSLS",
+    "LLRSSL",
+    "RS",
+    "LLSSSSSS",
+    "LSSSSSLS",
+    "SSSSSLS",
+    "SSSSSLSSSS",
+    "SLS",
+    "SSSS",
+    "LLSSSR",
+    "SSSS",
+    "LLSSSSSSLSSS",
+    "SSLSSSSS",
+    "SLSSSSLSSS",
+    "LL",
+    "RRSRSSRSSSSLL",
+    "SSSSSSLSSSSSSLSSS",
+    "LLSSRSR",
+    "SSSLSS",
+    "RS",
+    "R",
+    "SSSSSRRSLLSRSSSSRSSSSSRSR",
+    "RLSSSLL",
+    "SRS",
+    "LSSRS",
+    "SR",
+    "SSSRRSSLLSSR",
+    "SLSRSSRSSSSSRSSR",
+    "RSLSSS",
+    "LLSSRRLLSSSRS",
+    "SRSSSSSS",
+    "RRSSSSS",
+    "LLSS",
+    "SSSRSSSSRSSSSSSRS",
+    "SRS",
+    "RRLLSLSSLSS",
+    "RSSRSRRLLSSRSSLS",
+    "LLRR",
+    "LRRSSSSRR",
+    "LLRSSSSR",
+    "SSRRSLSLLRRLLSSRSSRSSSSS",
+    "SRRSSSSSLLSSS",
+    "SSRS",
+    "SSSR",
+    "RSSS",
+    "LSLLR",
+    "RLLRRS",
+    "S",
+    "SSRRS",
+    "SLSLLRR",
+    "LRSSS",
+    "RSSSSSSRRSSSSSLLSSSSSRSSSSRRSSSLLRLLRSRSSSSRRSSLSSLLSRS",
+    "R",
+    "RLLRSSRSSSSSSRRSSSSSLLSSSSSRSSSSRRSSSLSLLRRL",
+    "L",
+    "R",
+    "RSS",
+    "S"
+  ]
+}

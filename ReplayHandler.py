@@ -192,10 +192,10 @@ if __name__ == "__main__":
     handler = ReplayHandler()
     
     # Load externally (for example purposes)
-    with open("new_replay.json", "r") as f:
+    with open("replay.json", "r") as f:
         replay_data = json.load(f)
 
-    handler.encode_to_binary(replay_data, "new_replay.bin")
+    handler.encode_to_binary(replay_data, "replay.bin")
 
-    decoded = handler.decode_to_dict("new_replay.bin")
+    decoded = handler.decode_to_dict("replay.bin")
     print(json.dumps(decoded, indent=2))
