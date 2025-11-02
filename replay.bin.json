@@ -1,0 +1,86 @@
+{
+  "version": "5.0",
+  "result": {
+    "score": 61,
+    "reason": 1
+  },
+  "metadata": {
+    "map": {
+      "width": 8,
+      "height": 8
+    },
+    "seed": [
+      46829711
+    ],
+    "initial": {
+      "snake": [
+        32,
+        33,
+        34
+      ]
+    }
+  },
+  "segments": [
+    "SSSSS",
+    "RRSSSSS",
+    "SRSSS",
+    "RSSRSS",
+    "RSL",
+    "RRSS",
+    "RSSLSRS",
+    "SSRSSSSS",
+    "RSSSSR",
+    "RSSL",
+    "RLSSS",
+    "RRSSSSSSRSSS",
+    "SRSS",
+    "RR",
+    "SLLSSLSSSRSS",
+    "RSSSSRSSSSSSR",
+    "RSSSSSLSS",
+    "LSSSR",
+    "RSSSSRSSSSSSRSS",
+    "SSSSRSS",
+    "SRS",
+    "RL",
+    "RLS",
+    "SLSSS",
+    "SRRSSSSSSRSSSR",
+    "LLRSRSSSSRSS",
+    "LLSSRRSS",
+    "SRSSRSSLL",
+    "RR",
+    "LLSLSRSL",
+    "RRSRSLS",
+    "RSSSRSSSS",
+    "SSRS",
+    "SSSSSR",
+    "RSSSSSLLSSSSSRSS",
+    "SSRSRRLL",
+    "RR",
+    "LLSSSSLSL",
+    "LRSRSSRSSSR",
+    "SSSSSSRS",
+    "SRL",
+    "LRSSRRSLLSRSSSSRRSSSLSRLLSS",
+    "LLRRSSRRLLRRSSSSSL",
+    "LSSSS",
+    "SRRSSSSSSRS",
+    "SRLLRSSRSSS",
+    "SSSRRSSSSSLLR",
+    "SLSSL",
+    "LSRRSS",
+    "SRRLLRRSSS",
+    "SSLLSSSSSR",
+    "RS",
+    "SSS",
+    "SS",
+    "RS",
+    "SRLLRS",
+    "SRSS",
+    "SSS",
+    "SR",
+    "R",
+    "S"
+  ]
+}

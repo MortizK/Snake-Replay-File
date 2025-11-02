@@ -1,4 +1,5 @@
 import struct
+import os
 
 class ReplayHandler:
     """
@@ -181,18 +182,34 @@ class ReplayHandler:
         "segments": segments
     }
 
-    def updateResult(filepath: str) -> bytes:
+    def updateResult(self, filepath: str) -> bytes:
         return
 
-    def addSegment(filepath: str, moves: str) -> bytes:
+    def addSegment(self, filepath: str, moves: str) -> bytes:
+        lastbyte = 0
+        with open(filepath, "rb") as f:
+            f.seek(-1, 2)    # Changes the stream position to EOF - 1
+            binary_data = f.read()
+            lastbyte, = struct.unpack_from("B", binary_data)
+
+
+        with open(filepath, "a+b") as f:
+            f.seek(-1, 2)    # Changes the stream position to EOF - 1
+            f.truncate()
+            binary_data = self.encode_moves_bitpacked(moves, lastbyte)
+
+            f.write(binary_data)
         return
 
 if __name__ == "__main__":
     import json
     handler = ReplayHandler()
+    path = "replay.bin"
+
+    ReplayHandler().addSegment(path, "L")
     
     # Load externally (for example purposes)
-    path = input("Enter replay file (.bin): ").strip()
+    # path = input("Enter replay file (.bin): ").strip()
 
     decoded = handler.decode_to_dict(path)
 
