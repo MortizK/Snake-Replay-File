@@ -182,10 +182,17 @@ class ReplayHandler:
         "segments": segments
     }
 
-    def updateResult(self, filepath: str) -> bytes:
-        return
+    def updateResult(self, filepath: str, score: int, reason: int = 1) -> bytes:
+        with open(filepath, "r+b") as f:
+            # Score at byte offset 4
+            f.seek(4)
+            f.write(struct.pack("H", score))  # New Score
 
-    def addSegment(self, filepath: str, moves: str) -> bytes:
+            # Reason at byte offset 6
+            f.seek(6)
+            f.write(struct.pack("B", reason))     # New Reason
+
+    def addSegments(self, filepath: str, segments: list[str]) -> bytes:
         with open(filepath, "r+b") as f:
             # Read last byte
             f.seek(-1, 2)
@@ -197,7 +204,13 @@ class ReplayHandler:
             f.truncate()
 
             # encode and write new data
-            binary_data = self.encode_moves_bitpacked(moves, lastbyte)
+            binary_data = bytearray()
+            binary_data.extend(struct.pack("B", lastbyte))
+            for moves in segments:
+                packed_moves = self.encode_moves_bitpacked(moves, lastbyte)
+                lastbyte = packed_moves[-1]
+                binary_data.pop()                   # Remove last Byte
+                binary_data.extend(packed_moves)    # Last Byte is within this packed_moves
             f.write(binary_data)
 
 if __name__ == "__main__":
@@ -205,7 +218,8 @@ if __name__ == "__main__":
     handler = ReplayHandler()
     path = "replay.bin"
 
-    ReplayHandler().addSegment(path, "L")
+    # ReplayHandler().addSegments(path, ["L", "RR", "SLS"])
+    # ReplayHandler().updateResult(path, 42, 2)
     
     # Load externally (for example purposes)
     # path = input("Enter replay file (.bin): ").strip()
