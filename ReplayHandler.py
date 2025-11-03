@@ -240,10 +240,10 @@ if __name__ == "__main__":
 
     # handler.addSegments(path, ["L", "RR", "SLS"])
     # handler.updateResult(path, 42, 2)
-    handler.findStartOfSegments(path)
+    # handler.findStartOfSegments(path)
     
     # Load externally (for example purposes)
-    # path = input("Enter replay file (.bin): ").strip()
+    path = input("Enter replay file (.bin): ").strip()
 
     decoded = handler.decode_to_dict(path)
 
