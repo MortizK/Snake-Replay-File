@@ -186,20 +186,19 @@ class ReplayHandler:
         return
 
     def addSegment(self, filepath: str, moves: str) -> bytes:
-        lastbyte = 0
-        with open(filepath, "rb") as f:
-            f.seek(-1, 2)    # Changes the stream position to EOF - 1
-            binary_data = f.read()
-            lastbyte, = struct.unpack_from("B", binary_data)
+        with open(filepath, "r+b") as f:
+            # Read last byte
+            f.seek(-1, 2)
+            lastbyte_data = f.read(1)
+            lastbyte, = struct.unpack("B", lastbyte_data)
 
-
-        with open(filepath, "a+b") as f:
-            f.seek(-1, 2)    # Changes the stream position to EOF - 1
+            # go back and truncate last byte
+            f.seek(-1, 2)
             f.truncate()
-            binary_data = self.encode_moves_bitpacked(moves, lastbyte)
 
+            # encode and write new data
+            binary_data = self.encode_moves_bitpacked(moves, lastbyte)
             f.write(binary_data)
-        return
 
 if __name__ == "__main__":
     import json
