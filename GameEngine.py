@@ -14,6 +14,7 @@ functions:
 
 import random
 from ReplayHandler import ReplayHandler
+from Input import *
 
 class GameEngine:
     APPLE = '@ '
@@ -31,15 +32,16 @@ class GameEngine:
     AUTOSAVE = 'autosave'
     AUTOSAVE_PATH = REPLAY_FOLDER + AUTOSAVE + '.bin'
 
-    def __init__(self, width=10, height=10, seed=None):
+    def __init__(self, width=10, height=10, input_source: Input=Player(), seed=None):
         self.width = width
         self.height = height
+        self.input_source = input_source
         self.score = 0
         self.reason = 0  # 0: ongoing, 1: win, 2: collision
         self.segments = []
         self.current_segment = ''
         self.direction = self.RIGHT
-
+        
         # Initialize random seed
         if seed is None:
             self.seed = random.randint(0, 2**32 - 1)
@@ -49,7 +51,18 @@ class GameEngine:
 
         # Initialize game state
         self.snake = self.create_initial_snake()
+        
+        if type(self.input_source) == Replay:
+            state = self.input_source.state
+            self.width = state["width"]
+            self.height = state["height"]
+            self.seed = state["seed"]
+            self.snake = state["snake"]
+
         self.spawn_apple()
+
+        # Initialize the input Source
+        input_source.updateState(self.get_game_state())
 
         # create autosave on init
         self.save_game(self.AUTOSAVE)
@@ -95,6 +108,8 @@ class GameEngine:
             return
         self.apple = random.choice(free_positions)
 
+        self.input_source.updateApple(self.apple)
+
     def print_game(self):
         '''
         Prints the current game state to the console with score.
@@ -130,6 +145,10 @@ class GameEngine:
         '''
         Saves the current game state to a binary replay file.
         '''
+
+        if type(self.input_source) == Replay:
+            return
+
         handler = ReplayHandler()
 
         dict_data = {
@@ -156,8 +175,9 @@ class GameEngine:
         print("Starting the game loop. Type 'exit' to quit.")
         while True:
             self.print_game()
-            command = input("Enter command (quit/state/print) or movements (w/a/s/d): ")
-            command = command.strip().lower()
+
+            # Get Input from input_source
+            command = self.input_source.getInput().lower()
             if command == 'quit':
                 self.save_game(str(self.seed))
                 print("Quit the game.")
@@ -259,5 +279,7 @@ class GameEngine:
             exit()
 
 if __name__ == '__main__':
-    engine = GameEngine(width=10, height=10, seed=42)
+    # engine = GameEngine(width=6, height=6, input_source=Player(), seed=42)
+    
+    engine = GameEngine(width=10, height=10, input_source=Replay(), seed=42)
     engine.loop()
